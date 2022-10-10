@@ -1,0 +1,26 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Detail News
+{% endblock title %}
+
+{% block content %}
+   <h1>Детальная информация</h1>
+   <hr>
+<div align="left">
+        <h2>
+            Заголовок: {{ detailnews.title|censor}} </p>
+            Категория :<td>{% for nnn in detailnews.postCategory.all %}
+                        {{ nnn.name }}
+                   {% endfor %}</td></p>
+            Текст: {{ detailnews.text|censor}}</p>
+            Дата публикации: {{ detailnews.dateCreation|date:'d m Y' }}</p>
+            Автор: {{ detailnews.author.authorUser }} </p>
+            Рейтинг: {{ detailnews.rating}}</p>
+
+</h2>
+    </div>
+
+{% endblock content %}

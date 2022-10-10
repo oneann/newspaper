@@ -1,0 +1,40 @@
+python manage.py shell
+from news.models import *
+u1 = User.objects.create_user(username='Fedor')
+u2 = User.objects.create_user(username='Petr')
+Author.objects.create(authorUser=u1)
+Author.objects.create(authorUser=u2)
+Category.objects.create(name='IT')
+Category.objects.create(name='Art')
+Category.objects.create(name='Sport')
+Category.objects.create(name='Science')
+a1 = Author.objects.get(id=1)
+a2 = Author.objects.get(id=2)
+Post.objects.create(author=a1, categoryType='AR', title='test_title_1', text='test_text_1_it_and_art')
+Post.objects.create(author=a1, categoryType='NW', title='test_title_2', text='test_text_2_sport')
+Post.objects.create(author=a2, categoryType='AR', title='test_title_3', text='test_text_3_science')
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1), Category.objects.get(id=2))
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=3))
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=u2, text='test_comment_1')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=u1, text='test_comment_2')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=u2, text='test_comment_3')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=u1, text='test_comment_4')
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).rating
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).rating
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).rating
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=1).rating
+a1.update_rating()
+a2.update_rating()
+Author.objects.order_by('-ratingAuthor').values('authorUser__username', 'ratingAuthor')
+Post.objects.order_by('-rating').values('dateCreation', 'author__authorUser__username', 'rating', 'title')[0]
+best_post = Post.objects.order_by('-rating')[0]
+best_post.preview()
+best_post.comment_set.values('dateCreation','commentUser__username', 'rating', 'text')
+
+
